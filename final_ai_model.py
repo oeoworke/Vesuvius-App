@@ -18,8 +18,7 @@ import torch.nn as nn
 # ----------------------------
 class SurfaceNet(nn.Module):
     """
-    Unga report Section D-la explain panna vendiya model architecture.
-    Ithu input CT scans-la irunthu surface layers-ai extract seiyum.
+    This will extract the Surpass layers from the input kit scans.
     """
     def __init__(self):
         super(SurfaceNet, self).__init__()
