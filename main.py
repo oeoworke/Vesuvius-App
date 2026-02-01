@@ -14,7 +14,7 @@ import io
 import base64
 from PIL import Image
 
-# --- 1. Database Setup (Database Amaippu) ---
+# --- 1. Database Setup  ---
 DATABASE_URL = "postgresql://postgres:1974@localhost:5432/vesuvius_db"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -39,7 +39,7 @@ class History(Base):
 
 Base.metadata.create_all(bind=engine)
 
-# --- 2. SurfaceNet Model Architecture (Model Amaippu) ---
+# --- 2. SurfaceNet Model Architecture  ---
 class SurfaceNet(nn.Module):
     def __init__(self):
         super(SurfaceNet, self).__init__()
@@ -60,7 +60,7 @@ class SurfaceNet(nn.Module):
 model = SurfaceNet()
 model.eval() 
 
-# --- 3. API Setup (API Amaippu) ---
+# --- 3. API Setup  ---
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
@@ -97,7 +97,7 @@ def login(u: UserAuth):
     finally:
         db.close()
 
-# --- 4. REAL PREDICTION ENDPOINT (AI Prediction Endpoint) ---
+# --- 4. REAL PREDICTION ENDPOINT  ---
 @app.post("/predict")
 async def predict(file: UploadFile = File(...), user_id: str = Form(...)):
     db = SessionLocal()
@@ -123,7 +123,7 @@ async def predict(file: UploadFile = File(...), user_id: str = Form(...)):
         
         pixel_count = int(np.sum(mask_2d))
         
-        # --- FIXED GALAXY VISUALIZATION LOGIC (High Contrast & Vibrant) ---
+        # ---  GALAXY VISUALIZATION LOGIC ---
         def generate_galaxy_output(orig_img, mask, is_overlay=False):
             # Normalize image for visualization
             img_min, img_max = orig_img.min(), orig_img.max()
@@ -142,12 +142,12 @@ async def predict(file: UploadFile = File(...), user_id: str = Form(...)):
                 
                 # Galaxy Vibrant Colors
                 indigo_base = np.array([15/255, 15/255, 75/255]) # Deep Space Blue
-                orange_base = np.array([255/255, 115/255, 45/255]) # Glowing Nebula Orange
+                orange_base = np.array([255/255, 115/255, 45/255]) # Glowing Orange
                 
                 bg_mask = (mask == 0)
                 fg_mask = (mask == 1)
                 
-                # Apply textured tint (Texture Indigo matrum Orange-ukkul nalla theriyum)
+                # Apply textured tint (Texture Indigo matrum Orange)
                 rgb_img[bg_mask] = img_norm[bg_mask, None] * indigo_base
                 rgb_img[fg_mask] = img_norm[fg_mask, None] * orange_base
                 
@@ -155,7 +155,7 @@ async def predict(file: UploadFile = File(...), user_id: str = Form(...)):
 
             plt.axis('off')
             buf = io.BytesIO()
-            # Background-ai pure black-aa vaithu results-ai save seivom
+            # Background-ai pure black-aa vaithu results ah save 
             plt.savefig(buf, format='png', bbox_inches='tight', pad_inches=0, facecolor='black')
             plt.close()
             return f"data:image/png;base64,{base64.b64encode(buf.getvalue()).decode()}"
@@ -193,7 +193,7 @@ async def predict(file: UploadFile = File(...), user_id: str = Form(...)):
 def history(user_id: str):
     db = SessionLocal()
     try:
-        # History-ai desc order-la (puthiya records mudhalil) fetch pannuvom
+        # History-ai desc order-la (puthiya records first) fetch pannuvom
         return db.query(History).filter(History.user_id == user_id).order_by(History.timestamp.desc()).all()
     finally:
         db.close()

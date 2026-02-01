@@ -17,11 +17,6 @@ import {
   Eye
 } from 'lucide-react';
 
-/**
- * Vesuvius AI Pro - PostgreSQL Red Edition (Final Production)
- * Features: Real AI Model Image Display, Exact Pixel Count Rendering, 
- * History Persistence, Image Download, and Integer ID Deletion.
- */
 
 const API_BASE_URL = "http://localhost:8000";
 
