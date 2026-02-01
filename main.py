@@ -78,7 +78,7 @@ def register(u: UserReg):
     db = SessionLocal()
     try:
         if db.query(User).filter(User.email == u.email).first():
-            raise HTTPException(400, "Intha email munaadiyae irukku")
+            raise HTTPException(400, "This mail has already been activated.")
         new_u = User(full_name=u.full_name, email=u.email, password=u.password)
         db.add(new_u)
         db.commit()
@@ -92,7 +92,7 @@ def login(u: UserAuth):
     try:
         user = db.query(User).filter(User.email == u.email, User.password == u.password).first()
         if not user: 
-            raise HTTPException(401, "Sariyaana details illai")
+            raise HTTPException(401, "wrong details")
         return {"status": "success", "user": {"name": user.full_name, "email": user.email, "uid": f"USR-{user.id}"}}
     finally:
         db.close()
@@ -204,7 +204,7 @@ def delete_history(record_id: int):
     try:
         db_record = db.query(History).filter(History.id == record_id).first()
         if not db_record:
-            raise HTTPException(404, "Intha record database-il illai")
+            raise HTTPException(404, "This record is not in the database.")
         db.delete(db_record)
         db.commit()
         return {"status": "success"}
